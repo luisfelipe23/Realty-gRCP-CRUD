@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+service RealtyService {
+    rpc GetAll (Empty) returns (RealtyList) {}
+    rpc Get (RealtyRequestId) returns (Realty) {}
+    rpc Insert (Realty) returns (Realty) {}
+    rpc Update (Realty) returns (Realty) {}
+    rpc Remove (RealtyRequestId) returns (Empty) {}
+}
+
+message Empty {}
+
+message Realty {
+    string id = 1;
+    string title = 2;
+    string address = 3;
+    string type = 4;
+    int32 rooms = 5;
+    int32 garages = 6;
+    double built = 7;
+    double ground = 8;
+    double price = 9;
+}
+
+message RealtyList {
+    repeated Realty realties = 1;
+}
+
+message RealtyRequestId {
+    string id = 1;
+}

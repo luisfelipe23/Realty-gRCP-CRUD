@@ -1,0 +1,239 @@
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gerenciamento de Imóveis - SD</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .logrocket {
+            background-color: #027780;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="py-5 text-center">
+             <img class="d-block mx-auto mb-4"
+                src="https://i.imgur.com/3JtoUic.png" alt="Logo"
+                height="172">
+            <h2>Lista de Imóveis</h2>
+        </div>
+
+        <table class="table" id="realties_table">
+            <thead>
+                <tr>
+                    <th>ID do Imóvel</th>
+                    <th>Título do Imóvel</th>
+                    <th>Endereço</th>
+                    <th>Tipo</th>
+                    <th>Nº de Quartos</th>
+                    <th>Nº de Garagens</th>
+                    <th>Área Construída</th>
+                    <th>Área do Terreno</th>
+                    <th>Preço</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each results}}
+                <tr>
+                    <td>{{ id }}</td>
+                    <td>{{ title }}</td>
+                    <td>{{ address }}</td>
+                    <td>{{ type }}</td>
+                    <td>{{ rooms }}</td>
+                    <td>{{ garages }}</td>
+                    <td>{{ built }}</td>
+                    <td>{{ ground }}</td>
+                    <td>{{ price }}</td>
+                    <td>
+                        <a href="javascript:void(0);" class="btn btn-sm edit logrocket" data-id="{{ id }}"
+                            data-title="{{ title }}" data-address="{{ address }}" data-type="{{ type }}" data-rooms="{{ rooms }}" data-garages="{{ garages }}" data-built="{{ built }}" data-ground="{{ ground }}" data-price="{{ price }}">Editar</a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger remove" data-id="{{ id }}">Remover</a>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="5" class="text-center">No data to display.</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <button class="btn btn-success float-right" data-toggle="modal" data-target="#newRealtyModal">Adicionar</button>
+    </div>
+
+    <!-- New Realty Modal -->
+    <form action="/save" method="post">
+        <div class="modal fade" id="newRealtyModal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Novo Imóvel</h4>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" name="title" class="form-control" placeholder="Título do imóvel"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="address" class="form-control" placeholder="Endereço do imóvel"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="type" class="form-control" placeholder="Tipo de imóvel"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" name="rooms" class="form-control" placeholder="Quantidade de quartos" required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" name="garages" class="form-control" placeholder="Quantidade de garagens" required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" step="0.01" name="built" class="form-control" placeholder="Área construída" required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" step="0.01" name="ground" class="form-control" placeholder="Área do terreno" required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" step="0.01" name="price" class="form-control" placeholder="Preço do imóvel" required="required">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn logrocket">Criar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Edit Realty Modal -->
+    <form action="/update" method="post">
+        <div class="modal fade" id="editRealtyModal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Editar Imóvel</h4>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" name="title" class="form-control title" placeholder="Título do imóvel"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="address" class="form-control address" placeholder="Endereço do imóvel"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="type" class="form-control type" placeholder="Tipo de imóvel"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" name="rooms" class="form-control rooms" placeholder="Número de quartos"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" name="garages" class="form-control garages" placeholder="Número de garagens"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" step="0.01" name="built" class="form-control built" placeholder="Área construída"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" step="0.01" name="ground" class="form-control ground" placeholder="Área do terreno"
+                                required="required">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" step="0.01" name="price" class="form-control price" placeholder="Preço do imóvel"
+                                required="required">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="id" class="realty_id">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn logrocket">Atualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Remove Realty Modal -->
+    <form id="add-row-form" action="/remove" method="post">
+        <div class="modal fade" id="removeRealtyModal" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"></h4>Remover Imóvel</h4>
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza?
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="realty_id" class="form-control realty_id_removal"
+                            required="required">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn logrocket">Remover</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('#realties_table').on('click', '.edit', function () {
+                $('#editRealtyModal').modal('show');
+
+                $('.realty_id').val($(this).data('id'));
+                $('.title').val($(this).data('title'));
+                $('.address').val($(this).data('address'));
+                $('.type').val($(this).data('type'));
+                $('.rooms').val($(this).data('rooms'));
+                $('.garages').val($(this).data('garages'));
+                $('.built').val($(this).data('built'));
+                $('.ground').val($(this).data('ground'));
+                $('.price').val($(this).data('price'));
+
+            }).on('click', '.remove', function () {
+                $('#removeRealtyModal').modal('show');
+
+                $('.realty_id_removal').val($(this).data('id'));
+            });
+        });
+    </script>
+</body>
+
+</html>
